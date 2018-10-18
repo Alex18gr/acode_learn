@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/resources/css/signin.css}" rel="stylesheet" />
+
+</head>
+<body>
+
+<form name="f" th:action="@{/login}" class="form-signin" method="post">
+    <img class="mb-4" th:src="@{/resources/images/User_icon-cp.png}" alt="" width="72" height="90">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div th:if="${param.error}" class="alert alert-error">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success">
+        You have been logged out.
+    </div>
+    <label for="username" class="sr-only">Username</label>
+    <input type="text" id="username" class="form-control" placeholder="Username" name="username" required autofocus>
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" id="password" class="form-control" placeholder="Password" name="password" required>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+</form>
+
+</body>
+</html>
