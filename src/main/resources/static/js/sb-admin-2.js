@@ -30,6 +30,7 @@ $(function() {
     });
 
     var url = window.location;
+    // console.log(url);
     // var element = $('ul.nav a').filter(function() {
     //     return this.href == url;
     // }).addClass('active').parent().parent().addClass('in').parent();
