@@ -20,4 +20,9 @@ public class DemoAppController {
         return "home";
     }
 
+    @GetMapping("/user-profile")
+    public String getUserProfilePage() {
+        return "profile";
+    }
+
 }
