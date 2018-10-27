@@ -1,7 +1,9 @@
 package com.alexc.demobs.entity;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -32,6 +34,27 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
+
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "course_has_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Collection<Course> coursesEnrolled;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "user_has_course",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Collection<Course> coursesOwned;
 
     public User() {
     }
@@ -108,6 +131,22 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public Collection<Course> getCoursesEnrolled() {
+        return coursesEnrolled;
+    }
+
+    public void setCoursesEnrolled(Collection<Course> coursesEnrolled) {
+        this.coursesEnrolled = coursesEnrolled;
+    }
+
+    public Collection<Course> getCoursesOwned() {
+        return coursesOwned;
+    }
+
+    public void setCoursesOwned(Collection<Course> coursesOwned) {
+        this.coursesOwned = coursesOwned;
     }
 
     @Override

@@ -7,6 +7,8 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+
 @Repository
 public class UserDaoImpl implements UserDao {
 
@@ -15,6 +17,7 @@ public class UserDaoImpl implements UserDao {
     private SessionFactory sessionFactory;
 
     @Override
+    @Transactional
     public User findByUserName(String theUserName) {
         // get the current hibernate session
         Session currentSession = sessionFactory.getCurrentSession();
