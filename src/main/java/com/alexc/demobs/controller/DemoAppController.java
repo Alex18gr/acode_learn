@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DemoAppController {
@@ -27,6 +28,11 @@ public class DemoAppController {
     @GetMapping("/")
     public String HomeMapping() {
         return "home";
+    }
+
+    @RequestMapping("/not-authorized")
+    public String getNotAuthorized() {
+        return "not-authorized";
     }
 
     @GetMapping("/user-profile")

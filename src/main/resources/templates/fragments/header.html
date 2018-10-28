@@ -246,9 +246,9 @@
                         <!-- /input-group -->
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a th:href="@{/}"><i class="fa fa-dashboard fa-fw"></i> Secret Dashboard</a>
+                        <a th:href="@{/admin/admin-console}"><i class="fa fa-dashboard fa-fw"></i> Admin Console</a>
                     </li>
-                    <li>
+                    <li sec:authorize="!hasRole('ROLE_ADMIN')">
                         <a th:href="@{/}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
