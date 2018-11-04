@@ -30,6 +30,11 @@ public class DemoAppController {
         return "home";
     }
 
+    @RequestMapping("/text-editor")
+    public String GetTextEditor() {
+        return "edit-text-demo";
+    }
+
     @RequestMapping("/not-authorized")
     public String getNotAuthorized() {
         return "not-authorized";
