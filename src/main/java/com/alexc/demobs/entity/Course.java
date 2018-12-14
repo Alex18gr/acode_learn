@@ -38,6 +38,14 @@ public class Course {
     )
     private List<User> instructors;
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "course",
+            cascade = CascadeType.ALL
+
+    )
+    private List<Resource> courseResources;
+
     public Course() {
     }
 
