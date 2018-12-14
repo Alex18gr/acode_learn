@@ -1,6 +1,8 @@
 package com.alexc.demobs.controller;
 
+import com.alexc.demobs.dao.CourseDao;
 import com.alexc.demobs.entity.User;
+import com.alexc.demobs.service.CourseService;
 import com.alexc.demobs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,9 @@ public class CoursesController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CourseService courseService;
+
     @RequestMapping("/course-list")
     @Transactional
     public String getCoursesListPage(Model theModel, HttpServletRequest request) {
@@ -43,6 +48,17 @@ public class CoursesController {
         } else {
             logger.info("user is not admin");
         }
+
+        return "courses-list";
+    }
+
+    @RequestMapping("/populate")
+    @Transactional
+    public String populateDatabase(Model theModel) {
+
+        logger.info("poppulating tables...");
+
+
 
         return "courses-list";
     }
