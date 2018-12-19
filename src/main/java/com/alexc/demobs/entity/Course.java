@@ -1,5 +1,7 @@
 package com.alexc.demobs.entity;
 
+import com.alexc.demobs.entity.Resource.Resource;
+
 import javax.persistence.*;
 import java.util.List;
 

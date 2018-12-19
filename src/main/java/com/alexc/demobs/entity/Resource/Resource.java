@@ -1,11 +1,13 @@
-package com.alexc.demobs.entity;
+package com.alexc.demobs.entity.Resource;
 
+import com.alexc.demobs.entity.Course;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity @Data
+@Entity @Data @NoArgsConstructor
 @Table(name = "resource")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Resource {
@@ -31,6 +33,12 @@ public class Resource {
 
     private void doSth() {
 
+    }
+
+    public Resource(String name, Date dateCreated, Course course) {
+        this.name = name;
+        this.dateCreated = dateCreated;
+        this.course = course;
     }
 
     @PostUpdate

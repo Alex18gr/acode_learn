@@ -1,9 +1,11 @@
 package com.alexc.demobs.service;
 
 import com.alexc.demobs.dao.ResourceDao;
-import com.alexc.demobs.entity.Resource;
+import com.alexc.demobs.entity.Resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ResourceServiceImpl<T extends Resource> implements ResourceService<T> {
 
     @Autowired

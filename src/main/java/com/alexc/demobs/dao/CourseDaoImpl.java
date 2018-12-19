@@ -3,9 +3,7 @@ package com.alexc.demobs.dao;
 import com.alexc.demobs.entity.Course;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.logging.Logger;

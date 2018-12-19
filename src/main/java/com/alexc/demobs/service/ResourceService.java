@@ -1,6 +1,6 @@
 package com.alexc.demobs.service;
 
-import com.alexc.demobs.entity.Resource;
+import com.alexc.demobs.entity.Resource.Resource;
 
 public interface ResourceService<T extends Resource> {
 

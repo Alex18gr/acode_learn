@@ -1,14 +1,12 @@
 package com.alexc.demobs.dao;
 
-import com.alexc.demobs.entity.Course;
-import com.alexc.demobs.entity.FileResource;
-import com.alexc.demobs.entity.Resource;
+
+import com.alexc.demobs.entity.Resource.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 @Repository

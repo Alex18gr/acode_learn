@@ -1,9 +1,6 @@
 package com.alexc.demobs.dao;
 
-import com.alexc.demobs.entity.Course;
-import com.alexc.demobs.entity.Resource;
-
-import java.util.List;
+import com.alexc.demobs.entity.Resource.Resource;
 
 public interface ResourceDao<T extends Resource> {
 
