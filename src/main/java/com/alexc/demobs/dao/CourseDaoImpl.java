@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.logging.Logger;
 
 @Repository
@@ -17,6 +18,7 @@ public class CourseDaoImpl implements CourseDao {
     private SessionFactory sessionFactory;
 
     @Override
+    @Transactional
     public Course findCourseById(int courseId) {
 
         Session currentSession = sessionFactory.getCurrentSession();
@@ -30,6 +32,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    @Transactional
     public void saveCourse(Course mCourse) {
         Session currentSession = sessionFactory.getCurrentSession();
 

@@ -8,12 +8,20 @@ import com.alexc.demobs.entity.User;
 import com.alexc.demobs.service.CourseService;
 import com.alexc.demobs.service.ResourceService;
 import com.alexc.demobs.service.UserService;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.context.LazyContextVariable;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -21,6 +29,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -37,6 +46,9 @@ public class CoursesController {
 
     @Autowired
     private ResourceService<Resource> resourceService;
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
 
     @RequestMapping("/course-list")
     @Transactional
@@ -107,6 +119,48 @@ public class CoursesController {
 
 
         return "courses-list";
+    }
+
+    @RequestMapping(value = "/{courseId}", method = RequestMethod.GET)
+    @Transactional
+    public String getCourseInformationPage(@PathVariable int courseId,
+                                           Model theModel,
+                                           HttpServletRequest request
+    ) {
+
+        Context context = new Context();
+
+        // obtaining the current user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        User theUser = userService.findByUserName(userName);
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        // check if the student is enrolled to the course
+        if(course.getStudentsEnrolled().contains(theUser)) {
+
+            theModel.addAttribute("course", course);
+            context.setVariable("course", course);
+            context.setVariable("instructors",
+                    new LazyContextVariable<List<User>>() {
+
+                        @Override
+                        protected List<User> loadValue() {
+                            logger.info("getting lazily instructors...");
+                            return course.getInstructors();
+                        }
+                    });
+
+            String returnStr = springTemplateEngine.process("course/course-temp-page",
+                    context);
+            return "course/course-temp-page";
+            //return returnStr;
+        }
+
+
+        return "not-authorized";
     }
 
 }

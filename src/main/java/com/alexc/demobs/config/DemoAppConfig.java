@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -60,6 +59,8 @@ public class DemoAppConfig {
         initializer.setDataSource(dataSource);
         return initializer;
     }
+
+
 
 
 

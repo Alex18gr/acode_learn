@@ -1,11 +1,12 @@
 package com.alexc.demobs.entity;
 
 import com.alexc.demobs.entity.Resource.Resource;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity @Data
 @Table(name = "course")
 public class Course {
 

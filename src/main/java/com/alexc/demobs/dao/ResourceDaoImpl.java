@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.logging.Logger;
 
 @Repository
@@ -30,6 +31,7 @@ public class ResourceDaoImpl<T extends Resource> implements ResourceDao<T> {
     }
 
     @Override
+    @Transactional
     public T getResourceById(int id, Class<T> tClass) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -39,6 +41,7 @@ public class ResourceDaoImpl<T extends Resource> implements ResourceDao<T> {
     }
 
     @Override
+    @Transactional
     public void deleteResource(int id, Class<T> tClass) {
 
         Session session = sessionFactory.getCurrentSession();

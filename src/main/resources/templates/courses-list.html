@@ -63,7 +63,7 @@
                             <div class="panel-heading" th:text="${course.getTitle()}">Course title</div>
                             <div class="panel-body">
                                 <p th:text="${course.getDescription()}">description here</p>
-                                <button class="btn btn-primary">Enter</button>
+                                <a class="btn btn-primary" th:href="@{/courses/{id}/(id=${course.getId()})}" role="button">Enter</a>
                             </div>
                         </div>
                     </div>

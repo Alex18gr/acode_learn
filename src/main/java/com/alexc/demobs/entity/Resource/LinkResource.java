@@ -2,13 +2,14 @@ package com.alexc.demobs.entity.Resource;
 
 import com.alexc.demobs.entity.Course;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Entity @Data
+@Entity @Data @NoArgsConstructor
 @Table(name = "link_resource")
 public class LinkResource extends Resource {
 
