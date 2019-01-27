@@ -2,6 +2,8 @@ package com.alexc.demobs.entity;
 
 import com.alexc.demobs.entity.Resource.Resource;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,6 +11,9 @@ import java.util.List;
 @Entity @Data
 @Table(name = "course")
 public class Course {
+
+    @Transient
+    private static final Logger logger = LoggerFactory.getLogger(Course.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +79,15 @@ public class Course {
 
     public void setInstructors(List<User> instructors) {
         this.instructors = instructors;
+    }
+
+    public List<Resource> getCourseResources() {
+        logger.info("Courses Received...");
+        return courseResources;
+    }
+
+    public void setCourseResources(List<Resource> courseResources) {
+        this.courseResources = courseResources;
     }
 
     public Course(String title, String description, List<User> studentsEnrolled, List<User> instructors) {

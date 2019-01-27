@@ -46,5 +46,8 @@ public class Resource {
         this.dateCreated = new Date();
     }
 
+    public String getClassName() {
+        return this.getClass().getName();
+    }
 
 }

@@ -18,6 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_STUDENT = "ROLE_STUDENT";
+    public static final String ROLE_TEACHER = "ROLE_TEACHER";
+
     @Autowired
     private UserService userService;
 

@@ -19,9 +19,13 @@ public class RepositoryResource extends Resource {
     @Column(name = "repo_name")
     private String repoName;
 
-    public RepositoryResource(String name, Date dateCreated, Course course, String repoUrl, String repoName) {
+    @Column(name = "repo_user_repo")
+    private String repoNameRepo;
+
+    public RepositoryResource(String name, Date dateCreated, Course course, String repoUrl, String repoName, String repoNameRepo) {
         super(name, dateCreated, course);
         this.repoUrl = repoUrl;
         this.repoName = repoName;
+        this.repoNameRepo = repoNameRepo;
     }
 }

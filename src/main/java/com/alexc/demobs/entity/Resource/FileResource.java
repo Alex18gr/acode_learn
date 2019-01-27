@@ -15,7 +15,10 @@ import java.util.Date;
 public class FileResource extends Resource {
 
     @Column(name = "file_name")
-    private String name;
+    private String fileName;
+
+    @Column(name = "file_type")
+    private String fileType;
 
     @Column(name = "description")
     private String summary;
@@ -24,9 +27,9 @@ public class FileResource extends Resource {
     @Column(name = "file_data", columnDefinition = "LONGBLOB")
     private byte[] fileData;
 
-    public FileResource(String name, Date dateCreated, Course course, String name1, String summary, byte[] fileData) {
+    public FileResource(String name, Date dateCreated, Course course, String fileName, String summary, byte[] fileData) {
         super(name, dateCreated, course);
-        this.name = name1;
+        this.fileName = fileName;
         this.summary = summary;
         this.fileData = fileData;
     }
