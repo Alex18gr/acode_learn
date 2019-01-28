@@ -1,8 +1,10 @@
 package com.alexc.demobs.entity.Resource;
 
 import com.alexc.demobs.entity.Course;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity @Data @NoArgsConstructor
+@AllArgsConstructor @DynamicUpdate
 @Table(name = "repo_resource")
 public class RepositoryResource extends Resource {
 

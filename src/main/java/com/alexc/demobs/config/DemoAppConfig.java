@@ -1,23 +1,32 @@
 package com.alexc.demobs.config;
 
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EntityScan("com.alexc.demobs.entity")
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
+@EnableJpaRepositories(value = "com.alexc.demobs", entityManagerFactoryRef = "entityManagerFactory")
 public class DemoAppConfig {
 
     @Value("${spring.datasource.driver-class-name}") String driverClassName;
@@ -60,8 +69,38 @@ public class DemoAppConfig {
         return initializer;
     }
 
+    @Autowired
+    private JpaVendorAdapter jpaVendorAdapter;
 
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory()
+            throws NamingException {
+        LocalContainerEntityManagerFactoryBean factoryBean = new
+                LocalContainerEntityManagerFactoryBean();
+        factoryBean.setDataSource(getDataSource());
+        factoryBean.setPackagesToScan(new String[] { "com.alexc.demobs.entity" });
+        factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+        factoryBean.setJpaProperties(additionalProperties());
+        return factoryBean;
+    }
 
+    private Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        return properties;
+    }
 
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory()
+//            throws NamingException {
+//        LocalContainerEntityManagerFactoryBean factoryBean = new
+//                LocalContainerEntityManagerFactoryBean();
+//        factoryBean.setDataSource(getDataSource());
+//        factoryBean.setPackagesToScan(new String[] { "webroot.websrv" });
+//        factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
+//        factoryBean.setJpaProperties(jpaProperties());
+//        return factoryBean;
+//    }
 
 }

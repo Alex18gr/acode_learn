@@ -31,10 +31,6 @@ public class Resource {
     @JoinColumn(name = "course_id", nullable = false)
     protected Course course;
 
-    private void doSth() {
-
-    }
-
     public Resource(String name, Date dateCreated, Course course) {
         this.name = name;
         this.dateCreated = dateCreated;

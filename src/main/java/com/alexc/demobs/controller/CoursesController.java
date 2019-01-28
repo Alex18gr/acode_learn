@@ -3,6 +3,7 @@ package com.alexc.demobs.controller;
 import com.alexc.demobs.Util.ResourcesHelper;
 import com.alexc.demobs.config.SecurityConfig;
 import com.alexc.demobs.entity.Course;
+import com.alexc.demobs.entity.Resource.FileResource;
 import com.alexc.demobs.entity.Resource.LinkResource;
 import com.alexc.demobs.entity.Resource.RepositoryResource;
 import com.alexc.demobs.entity.Resource.Resource;
@@ -18,9 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.LazyContextVariable;
@@ -53,8 +53,8 @@ public class CoursesController {
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
 
-    @Autowired
-    private ResourceFileStorageService resourceFileStorageService;
+    //@Autowired
+    //private ResourceFileStorageService resourceFileStorageService;
 
     @RequestMapping("/course-list")
     @Transactional
@@ -294,8 +294,101 @@ public class CoursesController {
         return "not-authorized";
     }
 
+    @RequestMapping(value = "/{courseId}/resources/links", method = RequestMethod.GET)
+    @Transactional
+    public String getCourseResourcesLinksPage(@PathVariable int courseId,
+                                                     Model theModel,
+                                                     HttpServletRequest request
+    ) {
+        // obtaining the current user
+        User theUser = getCurrentUser();
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        // check if the student is enrolled to the course
+        if(course.getStudentsEnrolled().contains(theUser)
+                || course.getInstructors().contains(theUser)) {
+            if (course.getInstructors().contains(theUser)) {
+                theModel.addAttribute("isInstructor", true);
+            } else {
+                theModel.addAttribute("isInstructor", false);
+            }
+            course.getCourseResources().size();
+            ResourcesHelper helper = new ResourcesHelper(course.getCourseResources());
+            //helper.printResults();
+            theModel.addAttribute("linkResourcesList", helper.getLinkResources());
+            theModel.addAttribute("course", course);
+            logger.info("Directing to course resources repositories page...");
+            return "course/course-resources-links";
+        }
+        return "not-authorized";
+    }
+
+    @Transactional
+    @PostMapping(value = "/{courseId}/resources/links")
+    public String addNewLink(@PathVariable int courseId,
+                             @RequestParam("name") String name,
+                             @RequestParam("url") String url,
+                             @RequestParam("description") String description,
+                             Model theModel,
+                             HttpServletRequest request) {
+        // obtaining the current user
+        User theUser = getCurrentUser();
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        if (course.getInstructors().contains(theUser)
+                && request.isUserInRole(SecurityConfig.ROLE_TEACHER)) {
+            LinkResource linkResource = new LinkResource();
+            linkResource.setName(name);
+            linkResource.setDescription(description);
+            linkResource.setLink(url);
+            logger.info("received information from the form: " + linkResource);
+            linkResource.setCourse(course);
+            resourceService.saveResource(linkResource);
+
+            course.getCourseResources().size();
+            ResourcesHelper helper = new ResourcesHelper(course.getCourseResources());
+            //helper.printResults();
+            theModel.addAttribute("linkResourcesList", helper.getLinkResources());
+            theModel.addAttribute("course", course);
+            theModel.addAttribute("isInstructor", true);
+            return "course/course-resources-links";
+        }
+
+        return "not-authorized";
+    }
 
 
-    
 
+    @Autowired
+    private ResourceFileStorageService resourceFileStorageService;
+
+    @Transactional
+    @PostMapping("/{courseId}/resources/files/uploadFile")
+    public String uploadFile(@PathVariable int courseId,
+                             @RequestParam("file") MultipartFile file,
+                             Model theModel,
+                             HttpServletRequest request) {
+
+        logger.info("In upload file method...");
+        // obtaining the current user
+        User theUser = getCurrentUser();
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        if (course.getInstructors().contains(theUser)
+                && request.isUserInRole(SecurityConfig.ROLE_TEACHER)) {
+            logger.info("Uploading file: " + file.getName());
+            FileResource dbFile = resourceFileStorageService.storeResourceFile(file, course);
+            logger.info("File Uploaded: " + dbFile.getFileName());
+            return "course/course-resources-files";
+        }
+
+
+        return "not-authorized";
+    }
 }
