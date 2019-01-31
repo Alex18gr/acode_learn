@@ -8,31 +8,26 @@ import com.alexc.demobs.entity.Resource.LinkResource;
 import com.alexc.demobs.entity.Resource.RepositoryResource;
 import com.alexc.demobs.entity.Resource.Resource;
 import com.alexc.demobs.entity.User;
-import com.alexc.demobs.service.CourseService;
-import com.alexc.demobs.service.ResourceFileStorageService;
-import com.alexc.demobs.service.ResourceService;
-import com.alexc.demobs.service.UserService;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.alexc.demobs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.context.LazyContextVariable;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -52,6 +47,9 @@ public class CoursesController {
 
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
+
+    @Autowired
+    private ResourceFileStorageService resourceFileStorageService;
 
     //@Autowired
     //private ResourceFileStorageService resourceFileStorageService;
@@ -197,11 +195,48 @@ public class CoursesController {
         return "not-authorized";
     }
 
+    @Transactional
+    @RequestMapping(value = "/{courseId}/resources/files/uploadFile", method = RequestMethod.POST)
+    public String uploadFile(@PathVariable int courseId,
+                             @RequestParam("file") MultipartFile file,
+                             @RequestParam("name") String name,
+                             @RequestParam("description") String description,
+                             Model theModel,
+                             HttpServletRequest request) {
+
+        logger.info("In upload file method...");
+        // obtaining the current user
+        User theUser = getCurrentUser();
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        if (course.getInstructors().contains(theUser)
+                && request.isUserInRole(SecurityConfig.ROLE_TEACHER)) {
+            logger.info("Uploading file: " + file.getName());
+            FileResource fileResource = ResourcesHelper.getFileResource(file);
+            // set the rest details of the file...
+            fileResource.setName(name);
+            fileResource.setSummary(description);
+            fileResource.setCourse(course);
+            FileResource dbFile = resourceFileStorageService.storeResourceFile(fileResource);
+            logger.info("File Uploaded: " + dbFile.getFileName());
+            ResourcesHelper helper = new ResourcesHelper(course.getCourseResources());
+            theModel.addAttribute("fileResourcesList", helper.getFileResources());
+            theModel.addAttribute("course", course);
+
+            return "course/course-resources-files";
+        }
+
+
+        return "not-authorized";
+    }
+
     @RequestMapping(value = "/{courseId}/resources/files", method = RequestMethod.GET)
     @Transactional
     public String getCourseResourcesFilesPage(@PathVariable int courseId,
-                                           Model theModel,
-                                           HttpServletRequest request
+                                              Model theModel,
+                                              HttpServletRequest request
     ) {
         // obtaining the current user
         User theUser = getCurrentUser();
@@ -222,6 +257,49 @@ public class CoursesController {
             theModel.addAttribute("fileResourcesList", helper.getFileResources());
             theModel.addAttribute("course", course);
             logger.info("Directing to course info page...");
+            return "course/course-resources-files";
+        }
+        return "not-authorized";
+    }
+
+    @RequestMapping(value = "/{courseId}/resources/files/{fileResourceId}", method = RequestMethod.GET)
+    @Transactional
+    public String getCourseResourcesFileDownload(@PathVariable int courseId,
+                                                 @PathVariable int fileResourceId,
+                                                 Model theModel,
+                                                 HttpServletRequest request,
+                                                 HttpServletResponse response
+    ) throws IOException {
+        // obtaining the current user
+        User theUser = getCurrentUser();
+
+        // obtain the course from the url
+        Course course = courseService.findCourseById(courseId);
+
+        // check if the student is enrolled to the course
+        if(course.getStudentsEnrolled().contains(theUser)
+                || course.getInstructors().contains(theUser)) {
+            if (course.getInstructors().contains(theUser)) {
+                theModel.addAttribute("isInstructor", true);
+            } else {
+                theModel.addAttribute("isInstructor", false);
+            }
+            course.getCourseResources().size();
+            ResourcesHelper helper = new ResourcesHelper(course.getCourseResources());
+            theModel.addAttribute("fileResourcesList", helper.getFileResources());
+            theModel.addAttribute("course", course);
+            logger.info("Downloading File...");
+            FileResource file = resourceFileStorageService.findById(fileResourceId);
+            response.setContentType(file.getFileType());
+            response.setContentLength(file.getFileData().length);
+            response.setHeader("Content-Disposition","attachment; filename=\"" + file.getFileName() +"\"");
+
+            OutputStream out = response.getOutputStream();
+            FileCopyUtils.copy(file.getFileData(), out);
+            response.flushBuffer();
+            out.close();
+
+            //return "redirect:/add-document-";
             return "course/course-resources-files";
         }
         return "not-authorized";
@@ -326,7 +404,7 @@ public class CoursesController {
     }
 
     @Transactional
-    @PostMapping(value = "/{courseId}/resources/links")
+    @RequestMapping(value = "/{courseId}/resources/links", method = RequestMethod.POST)
     public String addNewLink(@PathVariable int courseId,
                              @RequestParam("name") String name,
                              @RequestParam("url") String url,
@@ -361,34 +439,4 @@ public class CoursesController {
         return "not-authorized";
     }
 
-
-
-    @Autowired
-    private ResourceFileStorageService resourceFileStorageService;
-
-    @Transactional
-    @PostMapping("/{courseId}/resources/files/uploadFile")
-    public String uploadFile(@PathVariable int courseId,
-                             @RequestParam("file") MultipartFile file,
-                             Model theModel,
-                             HttpServletRequest request) {
-
-        logger.info("In upload file method...");
-        // obtaining the current user
-        User theUser = getCurrentUser();
-
-        // obtain the course from the url
-        Course course = courseService.findCourseById(courseId);
-
-        if (course.getInstructors().contains(theUser)
-                && request.isUserInRole(SecurityConfig.ROLE_TEACHER)) {
-            logger.info("Uploading file: " + file.getName());
-            FileResource dbFile = resourceFileStorageService.storeResourceFile(file, course);
-            logger.info("File Uploaded: " + dbFile.getFileName());
-            return "course/course-resources-files";
-        }
-
-
-        return "not-authorized";
-    }
 }

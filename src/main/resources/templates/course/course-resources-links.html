@@ -56,26 +56,29 @@
                     <div class="panel panel-default" th:if="${not #lists.isEmpty(linkResourcesList)}">
                         <div class="panel-heading">Links</div>
                         <div class="panel-body">
-                            <table width="100%" class="table table-striped table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Link</th>
-                                    <th>Description</th>
-                                    <th th:if="${#bools.isTrue(isInstructor)}">Editing</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="resource : ${linkResourcesList}">
-                                    <td>
-                                        <span th:text="${resource.name}"></span>
-                                    </td>
-                                    <td><a th:href="${resource.link}" target="_blank"><span th:text="${resource.link}"></span></a></td>
-                                    <td th:text="${resource.description}"></td>
-                                    <td th:if="${#bools.isTrue(isInstructor)}"><button class="btn btn-primary">Edit</button></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Link</th>
+                                        <th>Description</th>
+                                        <th th:if="${#bools.isTrue(isInstructor)}">Editing</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="resource : ${linkResourcesList}">
+                                        <td>
+                                            <span th:text="${resource.name}"></span>
+                                        </td>
+                                        <td><a th:href="${resource.link}" target="_blank"><span th:text="${resource.link}"></span></a></td>
+                                        <td th:text="${resource.description}"></td>
+                                        <td th:if="${#bools.isTrue(isInstructor)}"><button class="btn btn-primary">Edit</button></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>

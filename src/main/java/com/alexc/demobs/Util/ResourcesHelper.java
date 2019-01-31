@@ -4,10 +4,14 @@ import com.alexc.demobs.entity.Resource.FileResource;
 import com.alexc.demobs.entity.Resource.LinkResource;
 import com.alexc.demobs.entity.Resource.RepositoryResource;
 import com.alexc.demobs.entity.Resource.Resource;
+import com.alexc.demobs.exception.FileStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +62,25 @@ public class ResourcesHelper {
 
     public List<FileResource> getFileResources() {
         return fileResources;
+    }
+
+    public static FileResource getFileResource(MultipartFile file) {
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+
+            if (fileName.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            FileResource fileResource = new FileResource();
+            fileResource.setFileType(file.getContentType());
+            fileResource.setFileName(fileName);
+            fileResource.setFileData(file.getBytes());
+            return fileResource;
+        } catch (IOException e) {
+            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", e);
+        }
     }
 }
