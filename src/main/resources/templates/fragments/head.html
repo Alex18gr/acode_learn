@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerFragment" th:remove="tag">
+    <title>Layout Generic Title</title>
+</head>
+<body>
+<div th:fragment="headerFragment" th:remove="tag">
+
+    <!-- Bootstrap Core CSS
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</div>
+
+<div th:fragment="footerFragment" th:remove="tag">
+    <!-- jQuery
+<script src="../vendor/jquery/jquery.min.js"></script> -->
+    <script th:src="@{/jquery/jquery.min.js}" ></script>
+
+    <!-- Bootstrap Core JavaScript
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
+    <script th:src="@{/js/bootstrap.min.js}" ></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script th:src="@{/js/sb-admin-2.js}" ></script>
+
+</div>
+</body>
+</html>

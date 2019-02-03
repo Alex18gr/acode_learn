@@ -17,6 +17,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
             <a class="navbar-brand" th:href="@{/courses/{id}/(id=${course.getId()})}"  th:text="${course.getTitle()}">SB Admin v2.0</a>
         </div>
         <!-- /.navbar-header -->
@@ -248,14 +249,20 @@
                         <!-- /input-group -->
                     </li>
                     <li>
-                        <a th:href="@{/courses/{id}/(id=${course.getId()})}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
+                        <a th:href="@{/courses/{id}/(id=${course.getId()})}"><i class="fa fa-tachometer-alt fa-fw"></i> Overview</a>
                     </li>
                     <li>
+                        <a href="#"><i class="fa fa-chalkboard-teacher fa-fw"></i> Lectures</a>
+                    </li>
+                    <li>
+                        <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
                         <a th:href="@{/courses/{id}/information(id=${course.getId()})}"><i class="fa fa-info fa-fw"></i> Course info</a>
                     </li>
                     <li>
                         <a href="#">
                             <i class="fa fa-briefcase fa-fw"></i> Resources<span class="fa arrow"></span></a>
+                        <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
                         <ul class="nav nav-second-level">
                             <li>
                                 <a th:href="@{/courses/{id}/resources/repositories(id=${course.getId()})}"><i class="fa fa-book fa-fw"></i> Repositories</a>
