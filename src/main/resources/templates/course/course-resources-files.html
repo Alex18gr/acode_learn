@@ -9,11 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <!-- Bootstrap Core CSS
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <div th:replace="fragments/head :: headerFragment"></div>
 
     <!-- MetisMenu CSS
     <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"> -->
@@ -52,15 +48,15 @@
             <div class="row">
                 <nav aria-label="breadcrumb" style="padding: 10px 16px;">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#" th:text="${course.title}"></a></li>
-                        <li class="breadcrumb-item"><a href="#">Resources</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/courses/{id}/(id=${course.getId()})}" th:text="${course.title}"></a></li>
+                        <li class="breadcrumb-item">Resources</li>
                         <li class="breadcrumb-item active" aria-current="page">Files</li>
                     </ol>
                 </nav>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Files</h1>
+                    <h1 class="page-header my-page-header">Files</h1>
                     <div sec:authorize="hasRole('ROLE_TEACHER')" style="margin-bottom: 25px">
                         <button class="btn btn-primary" data-toggle="modal" data-target="#fileUploadModal">Add new File</button>
                         <div th:replace="course/fragments/modals :: uploadFileFragment(id='fileUploadModal')"></div>
@@ -97,16 +93,7 @@
 </div>
 <!-- end of the main content -->
 
-<!-- jQuery
-<script src="../vendor/jquery/jquery.min.js"></script> -->
-<script th:src="@{/jquery/jquery.min.js}" ></script>
-
-<!-- Bootstrap Core JavaScript
-<script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
-<script th:src="@{/js/bootstrap.min.js}" ></script>
-
-<!-- Custom Theme JavaScript -->
-<script th:src="@{/js/sb-admin-2.js}" ></script>
+<div th:replace="fragments/head :: footerFragment"></div>
 
 <!-- Metis Menu Plugin JavaScript
 <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->
