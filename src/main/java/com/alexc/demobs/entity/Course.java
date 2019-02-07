@@ -54,6 +54,14 @@ public class Course {
     )
     private List<Resource> courseResources;
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "course",
+            cascade = CascadeType.ALL
+
+    )
+    private List<CourseSection> courseSections;
+
     public Course() {
     }
 
