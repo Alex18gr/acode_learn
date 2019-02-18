@@ -26,6 +26,9 @@ public class Course {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "section_name")
+    private String sectionName = "Section";
+
     @ManyToMany(fetch = FetchType.LAZY,
     cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})

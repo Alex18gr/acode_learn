@@ -236,6 +236,7 @@
 
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
+                <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
                 <ul class="nav" id="side-menu">
                     <li class="sidebar-search">
                         <div class="input-group custom-search-form">
@@ -249,11 +250,10 @@
                         <!-- /input-group -->
                     </li>
                     <li>
-                        <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->
                         <a th:href="@{/courses/{id}/(id=${course.getId()})}"><i class="fa fa-tachometer-alt fa-fw"></i> Overview</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-chalkboard-teacher fa-fw"></i> Lectures</a>
+                        <a href="#"><i class="fa fa-chalkboard-teacher fa-fw"></i> <span th:text="${course.getSectionName()}"></span></a>
                     </li>
                     <li>
                         <!--/*@thymesVar id="course" type="com.alexc.demobs.entity.Course"*/-->

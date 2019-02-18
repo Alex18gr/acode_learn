@@ -4,6 +4,7 @@ import com.alexc.demobs.entity.Resource.Resource;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity @Data
@@ -21,6 +22,10 @@ public class CourseSection {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "date")
+    @Temporal(TemporalType.DATE)
+    protected Date dateCreated = new Date();
+
     @ManyToOne(
             cascade = {CascadeType.PERSIST,CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH}
@@ -34,12 +39,10 @@ public class CourseSection {
     @JoinTable(
             name = "course_section_has_resource",
             joinColumns = {
-                    @JoinColumn(name = "course_section_id_course_section"),
-                    @JoinColumn(name = "course_section_course_id")
+                    @JoinColumn(name = "course_section_id_course_section")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "resource_id"),
-                    @JoinColumn(name = "resource_course_id")
+                    @JoinColumn(name = "resource_id")
             }
 
     )

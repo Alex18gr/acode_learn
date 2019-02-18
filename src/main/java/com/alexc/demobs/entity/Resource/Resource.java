@@ -39,12 +39,10 @@ public class Resource {
     @JoinTable(
             name = "course_section_has_resource",
             joinColumns = {
-                    @JoinColumn(name = "resource_id"),
-                    @JoinColumn(name = "resource_course_id")
+                    @JoinColumn(name = "resource_id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "course_section_id_course_section"),
-                    @JoinColumn(name = "course_section_course_id")
+                    @JoinColumn(name = "course_section_id_course_section")
             }
     )
     private List<CourseSection> courseSections;
