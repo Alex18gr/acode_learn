@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Page</title>
+</head>
+<body>
+<h1>This is Course page</h1>
+
+<h2 th:inline="text">Course Name: [[${course.getTitle()}]]</h2>
+<h2>Instructors: </h2>
+<th:block th:if="${not #lists.isEmpty(course.instructors)}" th:each="instr : ${course.instructors}">
+    <p th:text="${instr.getFirstName() + ' ' + instr.getLastName()}"></p>
+</th:block>
+<h2>Resources: </h2>
+<th:block th:if="${not #lists.isEmpty(course.courseResources)}" th:each="c : ${course.getCourseResources()}">
+    <p th:text="${c.name + ' ' + c.dateCreated}"></p>
+</th:block>
+
+</body>
+</html>

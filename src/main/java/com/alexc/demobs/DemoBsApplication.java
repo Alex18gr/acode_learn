@@ -2,18 +2,27 @@ package com.alexc.demobs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication(exclude = HibernateJpaAutoConfiguration.class)
-@Controller
-public class DemoBsApplication extends WebMvcConfigurerAdapter {
+import java.util.Arrays;
+
+@SpringBootApplication
+public class DemoBsApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoBsApplication.class, args);
+        ApplicationContext ctx =  SpringApplication.run(DemoBsApplication.class, args);
+        // printSpringBootBeans(ctx);
+    }
+
+    private static void printSpringBootBeans(ApplicationContext ctx) {
+        String[] beanNames = ctx.getBeanDefinitionNames();
+        Arrays.sort(beanNames);
+        for (String beanName : beanNames) {
+            System.out.println(beanName);
+        }
     }
 
     @Override
@@ -21,4 +30,5 @@ public class DemoBsApplication extends WebMvcConfigurerAdapter {
         registry.addViewController("/login").setViewName("custom-login");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
+
 }

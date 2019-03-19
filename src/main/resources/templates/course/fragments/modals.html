@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>modals</title>
+</head>
+<body>
+
+<div th:id="${id}" class="modal fade" role="dialog" th:fragment="uploadFileFragment(id)">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new file Resource</h4>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" id="singleUploadForm" name="singleUploadForm"
+                      action="#" th:action="@{files/uploadFile}" method="post" class="form-horizontal">
+                    <!-- Bootstrap Inputs... -->
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="fileInput">File:</label>
+                        <div class="col-sm-10">
+
+                            <input type="file" class="form-control" id="fileInput" placeholder="Select File" name="file" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="resourceName">Resource name:</label>
+                        <div class="col-sm-10">
+
+                            <input type="text" class="form-control" id="resourceName" placeholder="Enter Resource Name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="description">Description:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="description" placeholder="Enter File Description" name="description">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" value="Submit" form="singleUploadForm">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:id="${id}" class="modal fade" role="dialog" th:fragment="newLinkFragment(id)">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new Link Resource</h4>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" id="addLinkForm" name="singleUploadForm"
+                      action="#" th:action="@{links}" method="post">
+                    <div class="form-group">
+                        <label for="name">Link URL:</label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="theUrl">Link URL:</label>
+                        <input type="text" class="form-control" name="url" id="theUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="descr">Description:</label>
+                        <input type="text" class="form-control" id="descr" name="description">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

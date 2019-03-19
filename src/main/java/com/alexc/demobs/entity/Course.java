@@ -1,11 +1,19 @@
 package com.alexc.demobs.entity;
 
+import com.alexc.demobs.entity.Resource.Resource;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity @Data
 @Table(name = "course")
 public class Course {
+
+    @Transient
+    private static final Logger logger = LoggerFactory.getLogger(Course.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +25,9 @@ public class Course {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "section_name")
+    private String sectionName = "Section";
 
     @ManyToMany(fetch = FetchType.LAZY,
     cascade = {CascadeType.PERSIST, CascadeType.MERGE,
@@ -37,6 +48,22 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> instructors;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "course",
+            cascade = CascadeType.ALL
+
+    )
+    private List<Resource> courseResources;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "course",
+            cascade = CascadeType.ALL
+
+    )
+    private List<CourseSection> courseSections;
 
     public Course() {
     }
@@ -63,6 +90,15 @@ public class Course {
 
     public void setInstructors(List<User> instructors) {
         this.instructors = instructors;
+    }
+
+    public List<Resource> getCourseResources() {
+        logger.info("Courses Received...");
+        return courseResources;
+    }
+
+    public void setCourseResources(List<Resource> courseResources) {
+        this.courseResources = courseResources;
     }
 
     public Course(String title, String description, List<User> studentsEnrolled, List<User> instructors) {
